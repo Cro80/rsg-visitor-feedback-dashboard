@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>RSG | Visitor Feedback Intelligence</title>
+<meta name="description" content="Red Sea Global – Visitor Experience feedback dashboard">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231bb6cc'/%3E%3Ctext x='16' y='21' font-size='12' font-weight='800' text-anchor='middle' fill='white' font-family='Arial'%3ERSG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">RSG</div>
+      <div><b>Red Sea Global</b><span>Visitor Experience</span></div>
+    </div>
+    <div class="menu-label">MENU</div>
+    <nav class="nav" id="nav">
+      <a href="#dashboard" data-page="dashboard"><i>▦</i>Dashboard</a>
+      <a href="#survey" data-page="survey"><i>☰</i>Survey Data</a>
+      <a href="#alerts" data-page="alerts"><i>⚑</i>Alerts List</a>
+      <a href="#tables" data-page="tables"><i>▤</i>Analysis Tables</a>
+      <a href="#about" data-page="about"><i>ⓘ</i>About &amp; Guide</a>
+    </nav>
+    <div class="side-kpis">
+      <div class="skpi pink" data-go="alerts"><small>OPEN ALERTS</small><strong id="sk-alerts">–</strong><em id="sk-alerts-s"></em></div>
+      <div class="skpi teal" data-kpi="sat"><small>AVG SATISFACTION</small><strong id="sk-sat">–</strong><em>out of 5 · Q26</em></div>
+      <div class="skpi orange" data-kpi="nps"><small>NET PROMOTER SCORE</small><strong id="sk-nps">–</strong><em>5-point proxy · Q27</em></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h1>RSG <span>|</span> VISITOR FEEDBACK INTELLIGENCE</h1>
+      <p>Unified view of bookings, activities, feedback, ratings and complaints</p>
+      <button class="bell" id="bell" title="Open alerts" aria-label="Open alerts">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a6 6 0 0 0-6 6v4l-2 3v1h16v-1l-2-3V8a6 6 0 0 0-6-6zm0 20a2.5 2.5 0 0 0 2.4-2h-4.8A2.5 2.5 0 0 0 12 22z"/></svg>
+        <span class="badge" id="bell-n">0</span>
+        <small>ALERTS</small>
+      </button>
+    </header>
+    <div class="banner" id="banner">▸ Use the filters to slice every chart · click a KPI card to drill into its trend · open “Alerts List” to assign and close tickets</div>
+
+    <main class="content">
+
+      <!-- ============ DASHBOARD ============ -->
+      <section class="page" id="page-dashboard">
+        <div class="filters">
+          <div class="sel-w"><label>DESTINATION</label><div class="sel"><select id="f-dest"></select></div></div>
+          <div class="sel-w"><label>VISITOR TYPE</label><div class="sel"><select id="f-type"></select></div></div>
+          <div class="sel-w"><label>REGION</label><div class="sel"><select id="f-region"></select></div></div>
+          <div class="sel-w"><label>MONTH</label><div class="sel"><select id="f-month"></select></div></div>
+        </div>
+        <div class="chips" id="chips"></div>
+
+        <div class="kpis" id="kpis"></div>
+
+        <div class="grid">
+          <div class="card"><h3>Scores by service category (mean 1–5)</h3><div class="chart" id="ch-cat"></div></div>
+          <div class="card"><h3>Monthly satisfaction trend</h3><div class="chart" id="ch-trend"></div></div>
+          <div class="card"><h3>NPS distribution</h3><div class="chart" id="ch-nps"></div></div>
+
+          <div class="card"><h3>Satisfaction by destination</h3><div class="chart" id="ch-dest"></div></div>
+          <div class="card"><h3>Visitor types</h3><div class="chart" id="ch-type"></div></div>
+          <div class="card"><h3>Overall score by region</h3><div class="chart" id="ch-region"></div></div>
+
+          <div class="card"><h3>Monthly NPS</h3><div class="chart" id="ch-mnps"></div></div>
+          <div class="card"><h3>Satisfaction segments (Q26)</h3><div class="chart" id="ch-seg"></div></div>
+          <div class="card"><h3>Open alerts by severity</h3><div class="chart" id="ch-sev"></div></div>
+        </div>
+        <p class="foot">Data source: Visitor Experience Survey – Red Sea Global (n = 511, Oct 2026). Category, region, NPS and segment figures are survey results; destination, visitor-type, monthly and alert figures are illustrative prototype data.</p>
+      </section>
+
+      <!-- ============ SURVEY ============ -->
+      <section class="page" id="page-survey">
+        <div class="ph">
+          <div><h2>Survey Data</h2><p id="sv-sub"></p></div>
+          <div class="tools">
+            <input type="search" id="sv-q" placeholder="Search ID, region, destination…">
+            <select id="sv-nps"><option value="">All NPS groups</option><option>Promoter</option><option>Passive</option><option>Detractor</option></select>
+            <button class="btn" id="sv-reset">Clear filters</button>
+            <button class="btn pri" id="sv-csv">⬇ Export CSV</button>
+            <button class="btn" data-go="dashboard">◂ Back to Dashboard</button>
+          </div>
+        </div>
+        <div class="chips" id="sv-chips"></div>
+        <div class="tbl-wrap"><table id="sv-table"></table></div>
+        <div class="pager"><span id="sv-info"></span><div class="pg"><button class="btn sm" id="sv-prev">‹ Prev</button><span id="sv-pg"></span><button class="btn sm" id="sv-next">Next ›</button></div></div>
+      </section>
+
+      <!-- ============ ALERTS ============ -->
+      <section class="page" id="page-alerts">
+        <div class="ph">
+          <div><h2>Alerts List</h2><p>Click a row to assign an owner, start work or close the ticket · SLA 24 h</p></div>
+          <div class="tools">
+            <input type="search" id="al-q" placeholder="Search alerts…">
+            <select id="al-sev"><option value="">All severities</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option></select>
+            <select id="al-st"><option value="open">Open + In progress</option><option value="">All statuses</option><option>Open</option><option>In Progress</option><option>Closed</option></select>
+            <button class="btn" id="al-reset">Reset demo data</button>
+            <button class="btn" data-go="dashboard">◂ Back to Dashboard</button>
+          </div>
+        </div>
+        <div class="stat-cards" id="al-stats"></div>
+        <div class="tbl-wrap"><table id="al-table"></table></div>
+      </section>
+
+      <!-- ============ TABLES ============ -->
+      <section class="page" id="page-tables">
+        <div class="ph"><div><h2>Analysis Tables</h2><p>Statistical summary of the full survey sample (n = 511)</p></div>
+          <div class="tools"><input type="search" id="an-q" placeholder="Filter items…"><button class="btn" data-go="dashboard">◂ Back to Dashboard</button></div></div>
+        <div class="two">
+          <div class="box"><h3>Dimension reliability</h3><div class="in" id="an-dims"></div></div>
+          <div class="box"><h3>Pearson correlations</h3><div class="in" id="an-corr"></div></div>
+        </div>
+        <div class="box"><h3>Item statistics (Q1–Q27)</h3><div class="in" style="padding:0;max-height:420px;overflow:auto"><table id="an-items"></table></div></div>
+        <div class="two">
+          <div class="box"><h3>Means by group</h3><div class="in" style="padding:0;overflow:auto"><table id="an-groups"></table></div></div>
+          <div class="box"><h3>Inferential tests (SPSS)</h3><div class="in" id="an-tests"></div></div>
+        </div>
+      </section>
+
+      <!-- ============ ABOUT ============ -->
+      <section class="page" id="page-about">
+        <div class="ph"><div><h2>About &amp; Guide</h2><p>How to read and use this dashboard</p></div><button class="btn" data-go="dashboard">◂ Back to Dashboard</button></div>
+        <div class="box"><div class="in guide">
+          <h3>Purpose</h3>
+          <p>A single view of visitor bookings, activities, feedback, ratings and complaints for Red Sea Global destinations – built from the Visitor Experience Survey (n = 511; 261 Arabic · 250 English).</p>
+          <h3>How to use</h3>
+          <ul>
+            <li>Use the four filters (Destination, Visitor type, Region, Month) – every KPI and chart recalculates instantly.</li>
+            <li>Click any <b>KPI card</b> to open a drill-down with its monthly trend and destination breakdown.</li>
+            <li>Click a bar, donut slice or month point to <b>cross-filter</b>; click it again to remove the filter.</li>
+            <li><b>Survey Data</b> – search, sort, page and export the filtered responses to CSV.</li>
+            <li><b>Alerts List</b> – assign owners, start work and close tickets; the dashboard updates live and your changes are saved in this browser.</li>
+            <li><b>Analysis Tables</b> – item statistics, reliability, correlations, group means and SPSS tests.</li>
+          </ul>
+          <h3>Definitions</h3>
+          <ul>
+            <li><b>Avg satisfaction</b> – mean of Q26 (1–5). <b>Positive rate</b> – share of Q26 answers of 4 or 5.</li>
+            <li><b>NPS (5-point proxy)</b> – % promoters minus % detractors, grouped from Q27.</li>
+            <li><b>Open alerts</b> – alerts not yet closed, honoring the active filters. SLA = 24 h.</li>
+            <li><b>Overall</b> – mean of the four dimensions: Experience, Feedback, Smart platform, Outcome.</li>
+          </ul>
+          <h3>Data note</h3>
+          <p>Satisfaction, recommendation, region and item scores are real survey responses. Destination, visitor type, month and alert records are illustrative prototype data added for demonstration.</p>
+        </div></div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="modal" id="modal"><div class="dlg"><header><h3 id="m-title"></h3><button id="m-x" aria-label="Close">×</button></header><div class="body" id="m-body"></div></div></div>
+<div id="tip"></div><div id="toast"></div>
+
+<script src="js/data.js"></script>
+<script src="js/charts.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
